@@ -1,0 +1,24 @@
+.exit
+
+-- # Example SQL queries
+-- ## Remember all fields are strings!
+-- ### Simple select
+SELECT
+f1
+, f2
+, f3
+FROM temp.table
+WHERE [f1]="Hello"
+GROUP BY [f3]
+ORDER BY [f3] DESC
+;
+
+-- ### Make table
+CREATE TABLE main AS
+SELECT *
+FROM temp.table
+;
+
+-- ### Cross Tabulation
+
+-- ### Data Cleaning
