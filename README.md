@@ -45,7 +45,7 @@ Before presenting my changes, a word about plugins - I feel there is a valid cas
 - I don't want to load any code I don't understand. 
 - All my Lua is in one file - init.lua.
 
-# Custom files
+## Custom files
 Each file in this repository is annotated and should explain what is happening.
 
 The directory structure is important so my script can find files when necessary
@@ -122,7 +122,7 @@ editor
 |   \---zBackup
 ````
 
-# Custom key bindings
+## Custom key bindings
 For Windows many of these key bindings will not work without Autohotkey, which translates them into alternatives recognised by both the console and Micro. 
 
 In my trials of many editors, there are some editing actions and shortcuts I find useful, so I have adopted them.
@@ -495,7 +495,7 @@ Lua commands may be entered in a command line, or replaced in the text.
 | Edit Lua commands     | Alt_Shift_=           |
 | Interpret selection   | Ctrl_Alt_=            |
 
-# External Tools and Files
+## External Tools and Files
 
 These are the external tools I use from Micro:
 
@@ -597,7 +597,7 @@ editor
 
 Additionally, above my ````editor```` folder I have a ````help```` folder full of files, including a download from [micro-cheat](https://github.com/terokarvinen/micro-cheat/tree/main/cheatsheets).
 
-# Installation
+## Installation
 
 Just download the repository to a folder of your choice. I am in the process of removing and absolute paths fro my script.
 
