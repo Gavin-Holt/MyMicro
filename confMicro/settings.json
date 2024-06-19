@@ -1,0 +1,77 @@
+{
+    "*.ahk": {
+        "commenttype": "; %s"
+    },
+    "*.bat": {
+        "commenttype": "REM %s",
+        "filetype": "batch"
+    },
+    "*.cmd": {
+        "commenttype": "REM %s",
+        "filetype": "batch"
+    },
+    "*.gsl": {
+        "filetype": "lua"
+    },
+    "*.hta": {
+        "commenttype": "// %s",
+        "filetype": "html"
+    },
+    "*.json": {
+        "commenttype": "// %s"
+    },
+    "*.kix": {
+        "commenttype": ";  %s"
+    },
+    "*.lua51": {
+        "filetype": "lua"
+    },
+    "*.md": {
+        "commenttype": "-- %s",
+        "rmtrailingws": false
+    },
+    "*.mmd": {
+        "commenttype": "-- %s",
+        "filetype": "markdown",
+        "rmtrailingws": false
+    },
+    "*.sqlite": {
+        "commenttype": "-- %s"
+    },
+    "*.txt": {
+        "commenttype": "-- %s"
+    },
+    "*.wlua": {
+        "filetype": "lua"
+    },
+    "autoclose": false,
+    "backup": false,
+    "basename": true,
+    "colorscheme": "gmh_light",
+    "eofnewline": false,
+    "ft:batch": {
+        "commenttype": "REM %s"
+    },
+    "hlsearch": true,
+    "hltaberrors": true,
+    "hltrailingws": true,
+    "linter": false,
+    "matchbracehighlight": true,
+    "matchbracestyle": "highlight",
+    "parsecursor": true,
+    "pluginchannels": [
+        "https://raw.githubusercontent.com/micro-editor/plugin-channel/master/channel.json"
+    ],
+    "pluginrepos": [],
+    "rmtrailingws": true,
+    "savecursor": true,
+    "scrollbar": true,
+    "softwrap": true,
+    "splitBottom": true,
+    "splitRight": true,
+    "statusformatl": "$(filename)$(modified)",
+    "statusformatr": "$(line):$(col) $(percentage)% ",
+    "tabmovement": true,
+    "tabstospaces": true,
+    "wordwrap": true
+}

@@ -1,0 +1,5 @@
+print(_VERSION)
+print(package.path:gsub(";","\n"))
+print(package.cpath:gsub(";","\n"))
+require("extensions")
+print(Current.Buf.AbsPath)

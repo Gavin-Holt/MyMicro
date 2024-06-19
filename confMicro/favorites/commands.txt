@@ -1,0 +1,423 @@
+-- A list of known commands
+ahk
+cd $
+comment
+eval $
+goto $
+help $
+help bat
+help colors
+help commands
+help comment
+help copypaste
+help defaultkeys
+help help
+help keybindings
+help linter
+help lua
+help options
+help plugins
+help status
+help tutorial
+hsplit $
+log
+memusage
+open $
+plugin available
+plugin install $
+plugin list
+plugin remove $
+plugin search $
+plugin update $
+pwd
+quit
+reload
+reopen
+replace $
+replaceall $
+reset autoclose
+reset autoindent
+reset autosave
+reset autosu
+reset backup
+reset backupdir
+reset basename
+reset clipboard
+reset colorcolumn
+reset colorscheme
+reset comment
+reset cursorline
+reset diff
+reset diffgutter
+reset divchars
+reset divreverse
+reset encoding
+reset eofnewline
+reset fastdirty
+reset fileformat
+reset filetype
+reset ftoptions
+reset ignorecase
+reset incsearch
+reset indentchar
+reset infobar
+reset initlua
+reset keepautoindent
+reset keymenu
+reset linter
+reset literate
+reset matchbrace
+reset mkparents
+reset mouse
+reset parsecursor
+reset paste
+reset permbackup
+reset pluginchannels
+reset pluginrepos
+reset readonly
+reset relativeruler
+reset rmtrailingws
+reset ruler
+reset savecursor
+reset savehistory
+reset saveundo
+reset scrollbar
+reset scrollmargin
+reset scrollspeed
+reset smartpaste
+reset softwrap
+reset splitbottom
+reset splitBottom
+reset splitright
+reset splitRight
+reset status
+reset statusformat
+reset statusline
+reset sucmd
+reset syntax
+reset tabmovement
+reset tabsize
+reset tabstospaces
+reset useprimary
+reset xterm
+retab
+run
+save
+set autoclose off
+set autoclose on
+set autoindent off
+set autoindent on
+set autosave off
+set autosave on
+set autosu off
+set autosu on
+set backup off
+set backup on
+set backupdir $
+set basename off
+set basename on
+set clipboard external
+set clipboard internal
+set clipboard terminal
+set colorcolumn $
+set colorscheme gmh
+set colorscheme gmh_blue
+set colorscheme gmh_light
+set colorscheme solarized
+set comment off
+set comment on
+set cursorline off
+set cursorline on
+set diff off
+set diff on
+set diffgutter off
+set diffgutter on
+set divchars $
+set divreverse off
+set divreverse on
+set encoding $
+set eofnewline off
+set eofnewline on
+set fastdirty off
+set fastdirty on
+set fileformat dos
+set fileformat unix
+set filetype $
+set filetype lua
+set filetype markdown
+set ftoptions $
+set ignorecase off
+set ignorecase on
+set incsearch off
+set incsearch on
+set indentchar $
+set infobar off
+set infobar on
+set initlua $
+set keepautoindent off
+set keepautoindent on
+set keymenu off
+set keymenu on
+set linter $
+set literate off
+set literate on
+set matchbrace off
+set matchbrace on
+set mkparents off
+set mkparents on
+set mouse off
+set mouse on
+set parsecursor off
+set parsecursor on
+set paste off
+set paste on
+set permbackup off
+set permbackup on
+set pluginchannels $
+set pluginrepos $
+set readonly off
+set readonly on
+set relativeruler off
+set relativeruler on
+set rmtrailingws off
+set rmtrailingws on
+set ruler off
+set ruler on
+set savecursor off
+set savecursor on
+set savehistory off
+set savehistory on
+set saveundo off
+set saveundo on
+set scrollbar off
+set scrollbar on
+set scrollmargin $
+set scrollspeed $
+set smartpaste off
+set smartpaste on
+set softwrap off
+set softwrap on
+set splitbottom off
+set splitBottom off
+set splitbottom on
+set splitBottom on
+set splitright off
+set splitRight off
+set splitright on
+set splitRight on
+set status off
+set status on
+set statusformatl $
+set statusformatr $
+set statusline off
+set statusline on
+set sucmd $
+set syntax off
+set syntax on
+set tabmovement off
+set tabmovement on
+set tabsize $number
+set tabstospaces off
+set tabstospaces on
+set useprimary off
+set useprimary on
+set xterm off
+set xterm on
+setlocal autoclose off
+setlocal autoclose on
+setlocal autoindent off
+setlocal autoindent on
+setlocal autosave off
+setlocal autosave on
+setlocal autosu off
+setlocal autosu on
+setlocal backup off
+setlocal backup on
+setlocal backupdir $
+setlocal basename off
+setlocal basename on
+setlocal clipboard external
+setlocal clipboard internal
+setlocal clipboard terminal
+setlocal colorcolumn $
+setlocal colorscheme $
+setlocal comment off
+setlocal comment on
+setlocal cursorline off
+setlocal cursorline on
+setlocal diff off
+setlocal diff on
+setlocal diffgutter off
+setlocal diffgutter on
+setlocal divchars $
+setlocal divreverse off
+setlocal divreverse on
+setlocal encoding $
+setlocal eofnewline off
+setlocal eofnewline on
+setlocal fastdirty off
+setlocal fastdirty on
+setlocal fileformat dos
+setlocal fileformat unix
+setlocal filetype $
+setlocal ftoptions $
+setlocal ignorecase off
+setlocal ignorecase on
+setlocal incsearch off
+setlocal incsearch on
+setlocal indentchar $
+setlocal infobar off
+setlocal infobar on
+setlocal initlua $
+setlocal keepautoindent off
+setlocal keepautoindent on
+setlocal keymenu off
+setlocal keymenu on
+setlocal linter $
+setlocal literate off
+setlocal literate on
+setlocal matchbrace off
+setlocal matchbrace on
+setlocal mkparents off
+setlocal mkparents on
+setlocal mouse off
+setlocal mouse on
+setlocal parsecursor off
+setlocal parsecursor on
+setlocal paste off
+setlocal paste on
+setlocal permbackup off
+setlocal permbackup on
+setlocal pluginchannels $
+setlocal pluginrepos $
+setlocal readonly off
+setlocal readonly on
+setlocal relativeruler off
+setlocal relativeruler on
+setlocal rmtrailingws off
+setlocal rmtrailingws on
+setlocal ruler off
+setlocal ruler on
+setlocal savecursor off
+setlocal savecursor on
+setlocal savehistory off
+setlocal savehistory on
+setlocal saveundo off
+setlocal saveundo on
+setlocal scrollbar off
+setlocal scrollbar on
+setlocal scrollmargin $
+setlocal scrollspeed $
+setlocal smartpaste off
+setlocal smartpaste on
+setlocal softwrap off
+setlocal softwrap on
+setlocal splitbottom off
+setlocal splitBottom off
+setlocal splitbottom on
+setlocal splitBottom on
+setlocal splitright off
+setlocal splitRight off
+setlocal splitright on
+setlocal splitRight on
+setlocal status off
+setlocal status on
+setlocal statusformatl $
+setlocal statusformatr $
+setlocal statusline off
+setlocal statusline on
+setlocal sucmd $
+setlocal syntax off
+setlocal syntax on
+setlocal tabmovement off
+setlocal tabmovement on
+setlocal tabsize $number
+setlocal tabstospaces off
+setlocal tabstospaces on
+setlocal useprimary off
+setlocal useprimary on
+setlocal xterm off
+setlocal xterm on
+show autoclose
+show autoindent
+show autosave
+show autosu
+show backup
+show backupdir
+show basename
+show clipboard
+show colorcolumn
+show colorscheme
+show comment
+show cursorline
+show diff
+show diffgutter
+show divchars
+show divreverse
+show encoding
+show eofnewline
+show fastdirty
+show fileformat
+show filetype
+show ftoptions
+show ignorecase
+show incsearch
+show indentchar
+show infobar
+show initlua
+show keepautoindent
+show keymenu
+show linter
+show literate
+show matchbrace
+show mkparents
+show mouse
+show parsecursor
+show paste
+show permbackup
+show pluginchannels
+show pluginrepos
+show readonly
+show relativeruler
+show rmtrailingwl
+show ruler
+show savecursor
+show savehistory
+show saveundo
+show scrollbar
+show scrollmargin
+show scrollspeed
+show smartpaste
+show softwrap
+show splitbottom
+show splitBottom
+show splitright
+show splitRight
+show status
+show statusformatl
+show statusformatr
+show statusline
+show sucmd
+show syntax
+show tabmovement
+show tabsize
+show tabstospaces
+show useprimary
+show xterm
+showkey
+tab
+tabmove
+tabswitch
+term
+textfilter gawk.exe '$NF>0'
+textfilter lua.exe -
+textfilter sed.exe -z 's/\n//g'
+textfilter sort.exe -g -r
+textfilter sort.exe -g
+textfilter sort.exe -r
+textfilter sort.exe
+textfilter uniq.exe
+textfilter
+unbind
+vsplit
+wc

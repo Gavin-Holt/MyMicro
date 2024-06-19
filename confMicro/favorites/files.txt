@@ -1,0 +1,6 @@
+-- Favourite files to edit
+O:\MyProfile\editor\confMicro\settings.json
+O:\MyProfile\editor\confMicro\init.lua
+O:\MyProfile\editor\confMicro\bindings.json
+O:\MyProfile\editor\confMicro\todo.txt
+O:\MyProfile\editor\keyboard\Keys.mmd
