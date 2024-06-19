@@ -5,6 +5,7 @@ _This is my Micro. There are many like it, but this one is mine._
 - Introduction 
 - Custom key bindings 
 - External tools
+- Installation
 
 ## Introduction 
 Micro is a terminal based code editor ... more of this on the [official web site](https://github.com/zyedidia/micro).
@@ -595,6 +596,10 @@ editor
 ````
 
 Additionally, above my ````editor```` folder I have a ````help```` folder full of files, including a download from [micro-cheat](https://github.com/terokarvinen/micro-cheat/tree/main/cheatsheets).
+
+# Installation
+
+Just download the repository to a folder of your choice. I am in the process of removing and absolute paths fro my script.
 
 ---
 
