@@ -241,8 +241,8 @@ In my trials of many editors, there are some editing actions and shortcuts I fin
 
 ### Dialog boxes
 
-There are some instances where a clickable dialog box can be very useful.
-(Uses extrnal tools from https://www.robvanderwoude.com/dialogboxes.php)
+There are some instances where a clickable dialog box can be very useful 
+(uses extrnal tools from https://www.robvanderwoude.com/dialogboxes.php).
 
 | Actions______________ | Keys_________________ |
 | :---                  | :---                  |
