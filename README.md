@@ -1,4 +1,4 @@
-# MyMicro  - Under construction
+# MyMicro
 _This is my Micro. There are many like it, but this one is mine._ 
 
 ## Contents
