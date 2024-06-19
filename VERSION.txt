@@ -1,0 +1,5 @@
+Version: 0.0.0-unknown
+Commit hash: ced6d948
+Compiled on June 16, 2024
+
+Microsoft Windows [Version 10.0.19044.3086]
