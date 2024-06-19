@@ -404,7 +404,7 @@ This works best for locally stored versions sharing similar filenames. e.g. 2023
 
 #### Open help list
 
-I like to keep local copies of the runtime help files, add my own MarkDown files, and use [cheatsheets[(https://github.com/terokarvinen/micro-cheat):
+I like to keep local copies of the runtime help files, add my own MarkDown files, and use [cheatsheets](https://github.com/terokarvinen/micro-cheat):
 
 | Actions______________ | Keys_________________ |
 | :---                  | :---                  |
