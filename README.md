@@ -143,8 +143,8 @@ In my trials of many editors, there are some editing actions and shortcuts I fin
 | EOF                   | Ctrl_End              |
 | [Jump Brackets](https://github.com/Gavin-Holt/MyMicro/blob/c49e23b83546807c7442bb57091ffada4c4eff72/confMicro/init.lua#L931)         | [Ctrl_J](https://github.com/Gavin-Holt/MyMicro/blob/c49e23b83546807c7442bb57091ffada4c4eff72/confMicro/bindings.json#L91)                |
 | Goto Line Number      | [Ctrl_G](https://github.com/Gavin-Holt/MyMicro/blob/c49e23b83546807c7442bb57091ffada4c4eff72/confMicro/bindings.json#L90)                |
-| GoForwards Regex-i    | [Ctrl_]](https://github.com/Gavin-Holt/MyMicro/blob/c49e23b83546807c7442bb57091ffada4c4eff72/confMicro/bindings.json#L190)                |
-| GoBackwards Regex-i   | [Ctrl_[](https://github.com/Gavin-Holt/MyMicro/blob/c49e23b83546807c7442bb57091ffada4c4eff72/confMicro/bindings.json#L191)                |
+| GoForwards Regex-i    | Ctrl_] [here](https://github.com/Gavin-Holt/MyMicro/blob/c49e23b83546807c7442bb57091ffada4c4eff72/confMicro/bindings.json#L190)                |
+| GoBackwards Regex-i   | Ctrl_[ [here](https://github.com/Gavin-Holt/MyMicro/blob/c49e23b83546807c7442bb57091ffada4c4eff72/confMicro/bindings.json#L191)                |
 
 ### Selecting
 
