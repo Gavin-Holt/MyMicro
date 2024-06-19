@@ -395,7 +395,7 @@ This is one area where FZF shines. Using the current buffer path as proxy for th
 
 #### Open backup list
 
-This works best for locally stored versions sharing similar filenames. e.g. 2023_09_23_67465_Filename.ext
+This works best for locally stored versions sharing similar filenames. e.g. .\zBackup\2023_09_23_67465_Filename.ext
 
 | Actions______________ | Keys_________________ |
 | :---                  | :---                  |
