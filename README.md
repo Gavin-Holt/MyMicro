@@ -498,6 +498,7 @@ Lua commands may be entered in a command line, or replaced in the text.
 
 These are the external tools I use from Micro:
 
+- AutohotkeyU64.exe Version  1.1.33.00 (https://www.autohotkey.com/download/1.1/AutoHotkey_1.1.31.00.zip)
 - awk.exe in your path (https://gnuwin32.sourceforge.net/packages/gawk.htm)
 - bat.exe in your path (https://github.com/sharkdp/bat)
 - cat.exe in your path (http://gnuwin32.sourceforge.net/packages/coreutils.htm)
