@@ -23,7 +23,7 @@ Features listed include:
 
 Difficulties:
 
-- **Your terminal, your problem**: key bindings are dependent upon your terminal sending the key codes to the console. Most terminals have limitations and will not recognise common key chords (e.g. Windows Console, via cmd.exe, won't distinguish between Ctrl+Alpha and Ctrl+Alt+Alpha).
+- **Your terminal, your problem**: key bindings are dependent upon your terminal sending the key codes to Micro. Most terminals have limitations and will not recognise common key chords (e.g. Windows Console, via cmd.exe, won't distinguish between Ctrl+Alpha and Ctrl+Alt+Alpha).
 - **Features not implemented**: Code Folding, Modal Editing, Spell checking, Replace newline characters
 - **Lua chunks fail as a whole**: Each separate Lua file is parsed as a unit, failure will invalidate all the functions defined in that file.
 
