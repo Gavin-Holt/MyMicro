@@ -413,7 +413,7 @@ I like to keep local copies of the runtime help files, add my own MarkDown files
 
 #### Diff against list
 
-This works best for locally stored versions sharing similar filenames. e.g. 2023_09_23_67465_Filename.ext
+I use this for locally stored versions sharing similar filenames. e.g. .\zBackup\2023_09_23_67465_Filename.ext
 
 | Actions______________ | Keys_________________ |
 | :---                  | :---                  |
