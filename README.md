@@ -141,7 +141,7 @@ In my trials of many editors, there are some editing actions and shortcuts I fin
 | Down Full Page        | PgDn                  |
 | BOF                   | Ctrl_Home             |
 | EOF                   | Ctrl_End              |
-| Jump Brackets         | Ctrl_J                |
+| [Jump Brackets](https://github.com/Gavin-Holt/MyMicro/blob/c49e23b83546807c7442bb57091ffada4c4eff72/confMicro/init.lua#L931)         | [Ctrl_J](https://github.com/Gavin-Holt/MyMicro/blob/c49e23b83546807c7442bb57091ffada4c4eff72/confMicro/bindings.json#L91)                |
 | Goto Line Number      | Ctrl_G                |
 | GoForwards Regex-i    | Ctrl_]                |
 | GoBackwards Regex-i   | Ctrl_[                |
