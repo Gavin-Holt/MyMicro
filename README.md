@@ -505,7 +505,7 @@ These are the external tools I use from Micro:
 - cat.exe in your path (http://gnuwin32.sourceforge.net/packages/coreutils.htm)
 - ctags.exe in your path (https://github.com/universal-ctags/ctags-win32/releases)
 - fzf.exe in your path (https://github.com/junegunn/fzf/releases)
-- GetPlainText.exe in your path (http://clipdiary.com/getplaintext)
+- GetPlainText.exe in your path (http://clipdiary.com/getplaintext/)
 - GrepWin.exe in your path, I'm using Version 1.6.1.519 (https://tools.stefankueng.com/grepWin_cmd.html)
 - msgbox.exe in your path (http://claudiosoft.online.fr/msgbox.html)
 - openfilebox.exe in your path (https://www.robvanderwoude.com/dialogboxes.php#OpenFileBox)
