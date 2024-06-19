@@ -574,21 +574,14 @@ editor
 |           toc.md
 |           
 \---templates
-        default.awk
         default.bat
         default.cpp
         default.css
-        default.gsl
-        default.hta
-        default.htm
-        default.html
         default.ico
         default.java
         default.js
         default.jsp
-        default.lsp
         default.md
-        default.mmd
         default.php
         default.pl
         default.py
