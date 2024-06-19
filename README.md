@@ -57,8 +57,6 @@ editor
 |
 +---confMicro
 |   |   bindings.json
-|   |   colours.ini
-|   |   config.txt
 |   |   init.lua
 |   |   lua.lua
 |   |   settings.json
