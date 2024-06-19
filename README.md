@@ -510,7 +510,7 @@ These are the external tools I use from Micro:
 - msgbox.exe in your path (http://claudiosoft.online.fr/msgbox.html)
 - openfilebox.exe in your path (https://www.robvanderwoude.com/dialogboxes.php#OpenFileBox)
 - SaveFileBox.exe in your path (https://www.robvanderwoude.com/dialogboxes.php#SaveFileBox)
-- shelexec.exe in your path (http://www.naughter.com/shelexe.html)
+- shelexec.exe in your path (http://www.naughter.com/shelexec.html)
 - TextDiff.exe in your path (http://www.angusj.com/delphi/textdiff.html
 - tr.exe in your path (http://gnuwin32.sourceforge.net/packages/coreutils.htm)
 - Hunspell.exe in a set location, with dictionaries in a set location. (https://sourceforge.net/projects/ezwinports/files/hunspell-1.3.2-3-w32-bin.zip
