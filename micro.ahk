@@ -1,15 +1,21 @@
 ; This works with AutohotkeyU64.exe Version  1.1.33.00 (https://www.autohotkey.com/download/1.1/AutoHotkey_1.1.31.00.zip)
+;------------------------------------------------------------------------------
+; Settings
+;------------------------------------------------------------------------------
+#NoEnv 						; For security
+#SingleInstance force
+#MaxHotkeysPerInterval 200 	; Allow for many event -  as mouse wheel spins!
+
 
 ; **Micro enhancements:
 #If WinActive("Administrator:  micro") or WinActive("micro.exe") or WinActive("Micro") or WinActive("O:\MyProfile\editor\micro.exe")
 {
 
     ; AHK can only do F1-F24
-
-    ; Can't detect some keys in micro
-        ; CtrlAlt - All
+    ; Micro can receive F1-F64
+    ; Can't send some keys to micro
+        ; CtrlAlt   - All
         ; CtrlShift - Some
-
     ; Can't bind some keys in micro
         ; Ctrl+#
 
@@ -27,7 +33,7 @@
         ; New Line Below: Shift+Enter
         +Enter:: Send {End}{Enter}
 
-        ; Escape - quit
+        ; Escape - send quit
         SC001::Send ^q
 
         ; Swap Selection Cursor: CTRL-
@@ -81,16 +87,21 @@
         ^SC035:: Send {F23}
 
     ; CtrlShift Keys
-        ; SkipMultiCursor
+        ; SkipMultiCursor Portage
         ^+P::Send !x
+
         ; Indent: CTRL+>
         ^+.::Send !.
+
         ; Outdent: CTRL+<
         ^+,::Send !,
+
         ; Select word backwards :CTRL+Shift+Space
         ^+space:: Send {F22}
+
         ; Next tab/window: CTRL+TAB
         ^+TAB::Send !{F22}
+
         ; Run lua repl: CTRL+=
         ^+=::Send !{F24}
 
@@ -98,21 +109,29 @@
     ; CtrlAlt keys
         ; Prefix All Lines: Ctrl+Alt+[
         ^![::Send {F18}
+
         ; Postfix All Lines: Ctrl+Alt+]
-        ; needs calling twice
+        ; needs calling twice - don't know why
         ^!]::Send {F19}{F19}
+
         ; Backup: CTRL+Alt+B
         ^!b:: Send {F13}
+
         ; FindinFiles CTRL+Alt+F
         ^!f:: Send !{F16}
+
         ; Makeit: CTRL+Alt+M
         ^!m:: Send !{F14}
+
         ; runfile: CTRL+Alt+R
         ^!r:: Send !{F18}
+
         ; Todo: =CTRL+Alt+T
         ^!t:: Send {F17}
+
         ; Luaexec: CTRL+Alt+=
         ^!=::Send +{F13}
+
         ; Compsec: CTRL+Alt+#
         ^!SC02B:: Send {F20}
 

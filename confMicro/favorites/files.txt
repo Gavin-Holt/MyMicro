@@ -1,4 +1,3 @@
--- Favourite files to edit
 O:\MyProfile\editor\confMicro\settings.json
 O:\MyProfile\editor\confMicro\init.lua
 O:\MyProfile\editor\confMicro\bindings.json

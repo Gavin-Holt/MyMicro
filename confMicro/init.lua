@@ -29,7 +29,6 @@
 --             zBackup
 --          ctags
 --          dictionary
---          history
 --          hunspell
 --          insertions
 --          keyboard
@@ -68,6 +67,7 @@ local regexp        = import("regexp")
 --- **A few Lua extensions** some made with gopherLua libraries
 ----------------------------------------------------------------
 function print(...)
+-- Redirect print to buffer log
     local text = {...}
     for i,v in pairs(text) do
         text[i] = tostring(v)
@@ -76,6 +76,7 @@ function print(...)
     buffer.Log(tostring(text).."\n")
 end
 function string.trim(s)
+-- Full trim of whitespaces
     return s:match('^%s*(.-)%s*$')
 end
 function string.split(inputstr, sep)
@@ -100,6 +101,7 @@ function string.split(inputstr, sep)
     end
 end
 function string.wrap(text,left,right)
+-- Not called  - future plans
     return text:gsub("^.",left.."%1"):gsub(".$","%1"..right)
 end
 function table.stash(t,level,output)
@@ -235,9 +237,9 @@ function io.cd(Current)
     Current.CdCmd(Current,{path})
 end
 function io.stash(t,filename)                       -- TODO: Check for valid filename
-                                                    -- TODO: Process both separators
+-- Store a table as a text file                     -- TODO: Process both separators
                                                     -- TODO: and relative paths
--- Serialize to file , dependent upon table.stash()
+    -- Serialize to file , dependent upon table.stash()
     if type(t)~="table" then
         return "Error not a table: "..tostring(t)
     end
@@ -348,12 +350,13 @@ end
 ------------------------
 -- Don't bind directly to these functions
 -- I want to build an interface of pure Lua functions and data types i.e Not userdata!
--- Naming things:
+-- Naming things is difficult:
 --  Get - reads into a variable
---  Set - changes target
+--  Set - writes from a variable
 --  Select - changes cursor selection
 --  Copy - copies to clipboard
---  Cut  - removes and copies to clipboard
+--  Cut  - copies to clipboard and removes
+--  Del  - removes without clipboard
 --  Append - adds to clipboard
 
 editor = {}
@@ -369,12 +372,15 @@ function editor.NewTab(Current,filename)
         Current:NewTabCmd({})
     end
 end
-function editor.NewTabReadOnly(Current,filename)    -- TODO: Set as read only
+function editor.NewTabReadOnly(Current,filename)
+-- For opening help files in tabs
     if io.exists(filename) then
         Current:NewTabCmd({filename})
+        Current.Buf.Settings["readonly"] = true
     end
 end
 function editor.NewBuf(Current,filename)
+-- New tab
     if not filename then
         local buf, err = buffer.NewBufferFromString("")
         if err == nil then
@@ -389,7 +395,7 @@ function editor.NewBuf(Current,filename)
         else
             return nil
         end
-    elseif filename then
+    elseif filename then                                -- TODO: Check for valid file name
         local buf, err = buffer.NewBufferFromString(tostring(filename))
         if err == nil then
             return buf
@@ -401,27 +407,28 @@ function editor.NewBuf(Current,filename)
     end
 end
 function editor.Save(Current)
+-- Save file
     -- Make all files have dos endings i.e. CRFL
-    -- Current:SetOption("fileformat", "dos")
     Current.Buf.Settings["fileformat"] = "dos"
     -- Do the save
     Current.Buf:Save()
 end
-function editor.Reopen(Current)                     -- TODO: Mangles my files
+function editor.Reopen(Current)                     -- TODO: Wait for fix https://github.com/zyedidia/micro/issues/3303
 -- Reopen an file from disc
--- There does seem to be an undocumented builtin reopen command
     if io.exists(Current.Buf.AbsPath) then
-        -- I am having problems with mangled files
-        micro.InfoBar():Message("Buffer Reopen is not reliable - it mangles the contents")
         -- Current.Buf:ReOpen()
         -- micro.InfoBar():Message("Reopened: "..Current.Buf.AbsPath)
+
+        -- I am having problems with mangled files therefore
+        micro.InfoBar():Message("Buffer Reopen is not reliable - it mangles the contents")
     end
 end
-function editor.ShowLog(Current)
-    -- It would be great if we could check for an open LogBuf
+function editor.ShowLog(Current)                    -- TODO: Cehck if already open and use one log pane
+-- View log buffer
     Current:OpenLogBuf()
 end
 function editor.Panes(Current)
+-- Iterate open panes for switching Alt-W
     local t = {}
     local tabs = micro.Tabs()
     for i = 1,#tabs.List do
@@ -432,10 +439,12 @@ function editor.Panes(Current)
     end
     return t or nil
 end
-function editor.SaveHistory()
+function editor.SaveHistory()                       -- TODO: As we don't have single instance this can get corrupted
+-- Save a trail of file/line numbers for GoPrvious Alt-P
     io.stash(editor.History,config.ConfigDir.."/history/lines.lua")
 end
-function editor.LoadHistory()                       -- TODO: Fix reloading file
+function editor.LoadHistory()
+-- Get saved trail of file/line numbers for GoPrvious Alt-P
     if io.exists(config.ConfigDir.."/history/lines.lua") then
         editor.History = dofile(config.ConfigDir.."/history/lines.lua") or {}
         if #editor.History>1000 then
@@ -444,7 +453,7 @@ function editor.LoadHistory()                       -- TODO: Fix reloading file
     end
 end
 function editor.HasSelection(Current)
-    return Current.Cursor:HasSelection() -- or nil
+    return Current.Cursor:HasSelection()
 end
 function editor.GetSelection(Current)
     return util.String(Current.Cursor:GetSelection()) or nil
@@ -463,12 +472,18 @@ end
 function editor.GetLine(Current)
     return Current.Buf:Line(Current.Cursor.Y) or nil
 end
-function editor.GetBlock(Current)               -- TODO:
+function editor.GetBlock(Current)
+-- Get all part selected lines, including bottom up selections
     if Current.Cursor:HasSelection() then
-
-        return true
+        local block  =  ""
+        local top    = math.min(Current.Cursor.CurSelection[1].Y,Current.Cursor.CurSelection[2].Y)
+        local bottom = math.max(Current.Cursor.CurSelection[1].Y,Current.Cursor.CurSelection[2].Y)
+        for i=top, bottom,1 do
+            block = block..Current.Buf:Line(i).."\n"    -- TODO: Shoulduse system EOL character
+        end
+        return block
     else
-        return false
+        return nil
     end
 end
 function editor.SwapAnchor(Current)
@@ -492,6 +507,7 @@ function editor.SwapAnchor(Current)
     end
 end
 function editor.Goto(Current,linenumber)
+-- Focus and scroll to a specific line
     if linenumber and tonumber(linenumber)>0 then
         Current:GotoCmd({linenumber})
         return true
@@ -539,34 +555,14 @@ function editor.FindSel(Current)
     Current.Cursor.Loc = -Current.Cursor.OrigSelection[1]
     Current:Search(sel, false, true)
 end
-function editor.ChangeCase(Current,Case)            -- TODO: And I finally need it!
-
-end
 function editor.DoCommand(Current,command)
 -- This will run commands, but not bindable actions!
     Current:HandleCommand(command)
 end
-function editor.TableContents(t,name)               -- TODO: Not working from Lua prompt kills micro
--- Dump table index to terminal to discover functions
-    if type(t)~="table" then return end
-    local o = {}
-    for i,v in pairs(t) do
-        table.insert(o,name.."."..i.." "..type(v).."\n")
-    end
-    print(table.concat(o,"\n"))
-    editor.ShowLog(Current)
-    -- Examples
-    -- initlua.editor.TableContents(micro,"micro")
-    -- editor.TableContents(util,"util")
-    -- editor.TableContents(config,"config")
-    -- editor.TableContents(shell,"shell")
-    -- editor.TableContents(buffer,"buffer")
-    -- editor.TableContents(strings,"strings")
-    -- editor.TableContents(pathutils,"filepath")
-    -- editor.TableContents(ioutil,"ioutil")
-    -- editor.TableContents(utf8,"utf8")
+function editor.DoAction(current,action)
+-- This will activate actions
+    Current[action](Current)
 end
-
 
 ----------------------------------------------------
 --- **Bindable functions** -- single word lower case
@@ -582,6 +578,7 @@ function delsel(Current)
     end
 end
 function duplicate(Current)
+-- Duplicate depending upon what is selected
     if Current.Cursor:HasSelection() then
         if Current.Cursor.CurSelection[1].Y == Current.Cursor.CurSelection[2].Y then
             -- Selection on a single line - therefore:
@@ -621,6 +618,7 @@ function duplicate(Current)
     end
 end
 function toupper(Current)
+-- Change case to upper
     if editor.HasSelection(Current) then
         local sel = editor.GetSelection(Current)
         sel = string.upper(sel)
@@ -628,6 +626,7 @@ function toupper(Current)
     end
 end
 function tolower(Current)
+-- Change case to lower
     if editor.HasSelection(Current) then
         local sel = editor.GetSelection(Current)
         sel = string.lower(sel)
@@ -641,7 +640,7 @@ function findselected(Current)
     editor.FindSel(Current)
 end
 function findword(Current)                          -- Not called
--- Highlights all matches for the current selection
+-- Highlights all matches for the current word
     if editor.HasSelection(Current) then
         editor.FindSel(Current)
     else
@@ -670,7 +669,7 @@ function selectwordback(Current)
 end
 function selectline(Current)
 -- Quickly select the line or line below or unselect
--- This is different from the built-in action "SelectLine"
+    -- This is different from the built-in action "SelectLine"
     if not editor.HasSelection(Current) then
         Current.Cursor:SelectLine()
         return
@@ -709,9 +708,9 @@ function selectlineback(Current)
 end
 function selectforwards(Current)
 -- Select forwards from cursor using regex (set to ungreedy and case sensitive)
--- this does require escaping of regex metacharacter
--- this does not pollute the find history
--- this does not highlight all matches
+    -- this does require escaping of regex metacharacter
+    -- this does not pollute the find history
+    -- this does not highlight all matches
     local prompt = "SelectUntil : "
     local seed = "(?sU-i).*"
     local history = "SelectUntil"
@@ -741,9 +740,9 @@ function selectforwards(Current)
 end
 function selectbackwards(Current)
 -- Select backwards from cursor using regex (set to ungreedy and case sensitive)
--- this does require escaping of regex metacharacter
--- this does not pollute the find history
--- this does not highlight all matches
+    -- this does require escaping of regex metacharacter
+    -- this does not pollute the find history
+    -- this does not highlight all matches
     local prompt = "SelectBack : "
     local seed = "(?sU-i)"
     local history = "SelectBack"
@@ -773,10 +772,10 @@ function selectbackwards(Current)
 end
 function goforwards(Current)
 -- Move forwards from cursor using regex (set to ungreedy and case sensitive)
--- this does require escaping of regex metacharacter
--- this does not pollute the find history
--- this does not highlight all matches
--- this will alight at the beginning of a multicharacter search
+    -- this does require escaping of regex metacharacter
+    -- this does not pollute the find history
+    -- this does not highlight all matches
+    -- this will alight at the beginning of a multicharacter search
     local prompt = "Go forwards : "
     local seed = "(?sU-i)"
     local history = "Goforwards"
@@ -807,10 +806,10 @@ function goforwards(Current)
 end
 function gobackwards(Current)
 -- Move backwards from cursor using regex (set to ungreedy and case sensitive)
--- this does require escaping of regex metacharacter
--- this does not pollute the find history
--- this does not highlight all matches
--- this will alight at the beginning of a multicharacter search
+    -- this does require escaping of regex metacharacter
+    -- this does not pollute the find history
+    -- this does not highlight all matches
+    -- this will alight at the beginning of a multicharacter search
     local prompt = "Go backwards : "
     local seed = "(?sU-i)"
     local history = "Gobackwards"
@@ -841,12 +840,12 @@ function gobackwards(Current)
 end
 function retab(Current)
 -- Replaces all leading tabs with spaces or leading spaces with tabs
--- depending on the value of `tabstospaces`
+    -- depending on the value of `tabstospaces`
     editor.DoCommand(Current,"retab")
 end
 function SpawnMultiCursorAll(Current)
 -- I want to edit like a god!
--- https://github.com/zyedidia/micro/issues/2920
+    -- https://github.com/zyedidia/micro/issues/2920
     micro.InfoBar():Message("Still waiting for SpawnMultiCursorAll!")
 end
 function unmark(Current)
@@ -859,8 +858,8 @@ function pasteplain(Current)
 end
 function runfile(Current)
 -- Attempts to open the current file with the windows default application.
--- some extra processing for my multimarkdown and markdown files
--- Requires shelexec.exe in your path (http://www.naughter.com/shelexe.html)
+    -- Requires shelexec.exe in your path (http://www.naughter.com/shelexe.html)
+    -- added some extra processing for my multimarkdown and markdown files
     local ext  = Current.Buf.Path:match("^.+(%..+)$") or "unknown"
     if ext=="unknown" then return end
 
@@ -876,7 +875,8 @@ function runfile(Current)
     end
 end
 function joinlines(v)
--- After https://github.com/Lisiadito/join-lines-plugin
+-- Joins lines condensing whitespace
+    --https://github.com/Lisiadito/join-lines-plugin
     local a, b, c = nil, nil, v.Cursor
     local selection = c:GetSelection()
 
@@ -919,7 +919,7 @@ function joinlines(v)
 end
 function smarthome(Current)                     -- Not called
 -- Alter home key to hit indent, then hit column 1
--- https://github.com/deusnefum/micro-bounce
+    -- https://github.com/deusnefum/micro-bounce
     local Cursor = Current.Buf:GetActiveCursor()
     local origX = Cursor.Loc.X
     Cursor:StartOfText()
@@ -928,34 +928,13 @@ function smarthome(Current)                     -- Not called
     end
     Current:Relocate()
 end
--- function findnextbrace(Current, s, down)
---     if not s then s = "\\(|\\[|\\{|\\)|\\]|\\}" end
---     if down == nil then down = true end
---     local useRegex = true
---     local searchLoc = -Current.Cursor.Loc
---     if Current.Cursor:HasSelection() then
---         if down then
---             searchLoc = -Current.Cursor.CurSelection[2]
---         else
---             searchLoc = -Current.Cursor.CurSelection[1]
---         end
---     end
---     local match, found = Current.Buf:FindNext(s, Current.Buf:Start(), Current.Buf:End(), searchLoc, down, useRegex)
---     if found then
---         Current.Cursor:SetSelectionStart(match[1])
---         Current.Cursor:SetSelectionEnd(match[2])
---         Current.Cursor.OrigSelection[1] = -Current.Cursor.CurSelection[1]
---         Current.Cursor.OrigSelection[2] = -Current.Cursor.CurSelection[2]
---         Current.Cursor:GotoLoc(match[2])
---         Current:Relocate()
---         Current.Cursor:Deselect(true)
---     end
--- end
 function findmatchingbrace(Current)
+-- Move between matcihg braces
     return Current["JumpToMatchingBrace"](Current)
 end
 function jumpToExactMatchingBrace(Current)
--- https://github.com/zyedidia/micro/issues/3308
+-- Always select the actual brace
+  -- https://github.com/zyedidia/micro/issues/3308
     local mb, left, found = Current.Buf:FindMatchingBrace(-Current.Cursor.Loc)
     if found and not left then
         Current.Cursor:GotoLoc(mb)
@@ -964,18 +943,19 @@ function jumpToExactMatchingBrace(Current)
     end
     return false
 end
-function findNextUnpairedBraceLeft(bp)
--- https://github.com/zyedidia/micro/issues/3308
+function findNextUnpairedBraceLeft(Current)
+-- Jump to start of current enclosure
+    -- https://github.com/zyedidia/micro/issues/3308
     local countPar  = 0
     local countCurl = 0
     local countSq   = 0
 
-    local loc = -bp.Cursor.Loc
-    local bufStart = bp.Buf:Start()
+    local loc = -Current.Cursor.Loc
+    local bufStart = Current.Buf:Start()
 
     while loc:GreaterThan(bufStart) do
-        loc = loc:Move(-1, bp.Buf)
-        local curLine = bp.Buf:Line(loc.Y)
+        loc = loc:Move(-1, Current.Buf)
+        local curLine = Current.Buf:Line(loc.Y)
 
         local r = util.RuneAt(curLine, loc.X)
         if r == "(" then
@@ -1004,7 +984,8 @@ function findNextUnpairedBraceLeft(bp)
     return nil
 end
 function findNextUnpairedBraceRight(bp)
--- https://github.com/zyedidia/micro/issues/3308
+-- Jump to end of current enclosure
+    -- https://github.com/zyedidia/micro/issues/3308
     local countPar  = 0
     local countCurl = 0
     local countSq   = 0
@@ -1063,7 +1044,8 @@ function jumpToNextUnpairedBraceRight(bp)
     return false
 end
 function selectinner(bp)
--- https://github.com/zyedidia/micro/issues/3308
+-- Select inner contents of current enclosure
+    -- https://github.com/zyedidia/micro/issues/3308
     local braceStart = findNextUnpairedBraceLeft(bp)
     if braceStart ~= nil then
         local braceEnd, left, found = bp.Buf:FindMatchingBrace(braceStart)
@@ -1082,7 +1064,8 @@ function selectinner(bp)
     return false
 end
 function selectouter(bp)
--- https://github.com/zyedidia/micro/issues/3308
+-- Select braces and contents of current enclosure
+    -- https://github.com/zyedidia/micro/issues/3308
     local braceStart = findNextUnpairedBraceLeft(bp)
     if braceStart ~= nil then
         local braceEnd, left, found = bp.Buf:FindMatchingBrace(braceStart)
@@ -1102,8 +1085,8 @@ function selectouter(bp)
 end
 function opensel(Current)
 -- Attempts to use the current selection as a filename for editing in micro,
--- or as a url to be opened with the windows default application.
--- Requires shelexec.exe in your path (http://www.naughter.com/shelexe.html)
+    -- or as a url to be opened with the windows default application.
+    -- Requires shelexec.exe in your path (http://www.naughter.com/shelexe.html)
     sel = editor.GetSelection(Current)
 
     -- Remove newline and leading/trailing whitespace - allow lazy selection
@@ -1117,7 +1100,7 @@ function opensel(Current)
     end
 
     -- Check for url and try to open
-    if sel:match("http://%S+") or sel:match("http://%S+") or sel:match("ftp://%S+") or sel:match("mailto://%S+") then
+    if sel:match("http://%S+") or sel:match("https://%S+") or sel:match("ftp://%S+") or sel:match("mailto://%S+") then
         shell.RunCommand("shelexec.exe " .. sel)
     end
 
@@ -1128,8 +1111,8 @@ function reopen(Current)
 end
 function backupfile(Current)
 -- I like local date stamped backups
--- Requires xcopy.exe in your path
---  Don't try to backup none-existent files
+    -- Requires xcopy.exe in your path
+    -- Don't try to backup none-existent files
     if not io.exists(Current.Buf.AbsPath) then return end
     -- Make backup folder
     local zbackfolder = io.filepath(Current.Buf.AbsPath)..[[\zBackup]]
@@ -1153,7 +1136,8 @@ function backupfile(Current)
     micro.InfoBar():Message("Backup @ "..sel)
 end
 function wordcount(Current)
--- https://github.com/micro-editor/updated-plugins/blob/master/micro-wc-plugin/wc.lua
+-- Count words in selection or whole buffer
+    -- https://github.com/micro-editor/updated-plugins/blob/master/micro-wc-plugin/wc.lua
     --Get active cursor (to get selection)
     local Cursor = Current.Buf:GetActiveCursor()
     --If cursor exists and there is selection, convert selection byte[] to string
@@ -1175,9 +1159,14 @@ function wordcount(Current)
     --display the message
     micro.InfoBar():Message("Lines:" .. lineCount .. "  Words:"..wordCount.."  Characters:"..charCount)
 end
+function cutappend(Current)                        -- TODO:
+-- Apend current selection to clipboard and delete
+end
 function copyappend(Current)                        -- TODO:
+-- Apend current selection to clipboard
 end
 function wraptoggle(Current)
+-- Wrap text
     Current.Buf.Settings["softwrap"] = not Current.Buf.Settings["softwrap"]
 end
 function hdual(Current)
@@ -1203,7 +1192,7 @@ function makeit(Current)
     end
 end
 function todo(Current)
--- Call local makeit.bat if exists
+-- Edit local todo.txt if exists
     local filename = Current.Buf:GetName()
     local folder = io.filepath(filename)
     local target = folder .."\\" .. "todo.txt"
@@ -1213,10 +1202,11 @@ function todo(Current)
     end
 end
 function cheat(Current)
--- micro-cheat (https://github.com/terokarvinen/micro-cheat/tree/main/cheatsheets)
---      Cheatsheets are copyrighted by their original authors
---      Cheatsheets from Devhints.io are copyright 2021
---      Rico Sta. Cruz and contributors, received under the MIT license
+-- Open cheat sheet micro-cheat
+    -- https://github.com/terokarvinen/micro-cheat/tree/main/cheatsheets
+    -- Cheatsheets are copyrighted by their original authors
+    -- Cheatsheets from Devhints.io are copyright 2021
+    -- Rico Sta. Cruz and contributors, received under the MIT license
     local filename = Current.Buf:GetName()
     local filetype = Current.Buf:FileType()
     local cheatdir = config.ConfigDir.."/../../help/sheets/"
@@ -1231,7 +1221,7 @@ function cheat(Current)
 end
 function clearcursors(Current)
 -- Provide a return value for keybinding parser
--- https://github.com/zyedidia/micro/issues/2755
+    -- https://github.com/zyedidia/micro/issues/2755
     if Current.Buf:NumCursors() > 1 then
         Current:RemoveAllMultiCursors()
         return true
@@ -1240,20 +1230,32 @@ function clearcursors(Current)
     end
 end
 function luaexec(Current)
--- View results of running selected Lua code within micro
--- print is redirected to Log
+-- Insert returned value of selected Lua code within Micro Ctrl+Alt+=
+    -- type(string.split)
+    -- 21^6
+    -- for i,v in pairs(_G) do if type(v)=="table" then print(i) end end -- FAILS no return to print
+
+    local function print(...)
+        local text = {...}
+        if not text then return end
+        for i,v in pairs(text) do
+            text[i] = tostring(v)
+        end
+        local text = table.concat(text,"\t")
+        Current.Buf:Insert(editor.GetTextLoc(Current),tostring(text))
+    end
     if not editor.HasSelection(Current) then return end
     local sel = editor.GetSelection(Current)
-    local f = loadstring(sel)
+    local f = loadstring("return "..sel)
     local r = f()
     if r then
         Current.Cursor:DeleteSelection()
-        Current.Buf:Insert(editor.GetTextLoc(Current), tostring(r))
+        print(r)
     end
 end
 function luamode(Current)
--- Lua repl
--- print is redirected to Log
+-- Lua command line Ctrl+=
+    -- print is redirected to Log
     local prompt = "Lua> "
     local seed = editor.GetSelection(Current) or ""
     local history = "Lua"
@@ -1282,8 +1284,6 @@ function pwd(Current)
     micro.InfoBar():Message("Current Directory : "..pathutils.Dir(Current.Buf.AbsPath))
 end
 
--- NB I never got in the habit of using bookmarks
-
 -------------------
 --- **fzf actions**
 -------------------
@@ -1293,10 +1293,10 @@ end
 
 function fzfkeys(Current)                           -- Display current bindings
 -- Search keybindings and then execute
--- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
--- Requires cat.exe in your path (http://gnuwin32.sourceforge.net/packages/coreutils.htm)
--- Requires tr.exe in your path (http://gnuwin32.sourceforge.net/packages/coreutils.htm)
--- Requires awk.exe in your path (https://gnuwin32.sourceforge.net/packages/gawk.htm)
+    -- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
+    -- Requires cat.exe in your path (http://gnuwin32.sourceforge.net/packages/coreutils.htm)
+    -- Requires tr.exe in your path (http://gnuwin32.sourceforge.net/packages/coreutils.htm)
+    -- Requires awk.exe in your path (https://gnuwin32.sourceforge.net/packages/gawk.htm)
     local target1 = config.ConfigDir..[[/bindings.json]]
     -- NB bindings.json includes duplicates of keys that my terminal can't send.
     if not io.exists(target1) then return end
@@ -1334,8 +1334,8 @@ function fzfkeysedit(Current)                       -- Edit key bindings
 end
 function fzfcmd(Current)                            -- Display/run saved commands
 -- Select a command from a saved list
--- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
--- Requires cat.exe in your path (http://gnuwin32.sourceforge.net/packages/coreutils.htm)
+    -- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
+    -- Requires cat.exe in your path (http://gnuwin32.sourceforge.net/packages/coreutils.htm)
 
     -- Locate completions - a list of commands (manual update)
     local target = config.ConfigDir..[[/favorites/commands.txt]]
@@ -1363,7 +1363,7 @@ function fzfcmdedit(Current)                        -- Edit command list
 end
 function fzfopen(Current)                           -- Display/open project+favourite files
 -- Use fzf to select and open a file in a new tab
--- Will search down subdirectories from current location i.e. The project
+    -- Will search down subdirectories from current location i.e. The project
     local path = pathutils.Dir(Current.Buf.AbsPath)
     local filelist = [[dir /s/b ]]..path..[[\*.* ]]                                 -- Needs dos separators
     filelist = filelist..[[& type ]]..config.ConfigDir..[[\favorites\files.txt ]]   -- Needs dos separators
@@ -1376,7 +1376,7 @@ function fzfopen(Current)                           -- Display/open project+favo
 end
 function fzfopenedit(Current)                       -- Edit favourite files
 -- Edit saved list of favourite files
--- these always appear in the fzfopen list
+    -- these always appear in the fzfopen list
     local target = config.ConfigDir..[[/favorites/files.txt ]]
     if io.exists(target) then
         editor.NewTab(Current,target)
@@ -1384,8 +1384,8 @@ function fzfopenedit(Current)                       -- Edit favourite files
 end
 function fzfunique(Current)                         -- Display/complete current word from unique words
 -- Complete current word using list from the current file
--- After https://github.com/wettoast4/micro-editor_wordCompletion/blob/main/wordCompletion.lua
--- Requires fzf.exe, cat,exe, tr.exe, uniq.exe in your path
+    -- After https://github.com/wettoast4/micro-editor_wordCompletion/blob/main/wordCompletion.lua
+    -- Requires fzf.exe, cat,exe, tr.exe, uniq.exe in your path
     -- Get filename
     local filename = Current.Buf:GetName()
     -- Get primary cursor selection
@@ -1415,8 +1415,8 @@ function fzfunique(Current)                         -- Display/complete current 
 end
 function fzfsnippet(Current)                        -- Display/insert snippet
 -- Select and insert file from snippets folder, with preview
--- Requires fzf.exe and bat.exe in your path (https://github.com/junegunn/fzf/releases)
--- Requires bat.exe in your path (https://github.com/sharkdp/bat)
+    -- Requires fzf.exe and bat.exe in your path (https://github.com/junegunn/fzf/releases)
+    -- Requires bat.exe in your path (https://github.com/sharkdp/bat)
     local snipfolder = config.ConfigDir..[[/../snippets]]
     Current.CdCmd(Current,{snipfolder})
     local sel, err = shell.RunInteractiveShell("fzf.exe --history='"..config.ConfigDir.."/history/snip.fzf'  --preview 'bat.exe --style=numbers --color=always --line-range :500 {}' --prompt='> snippet '   --color prompt:110 ", false, true)
@@ -1432,8 +1432,8 @@ function fzfsnippet(Current)                        -- Display/insert snippet
 end
 function fzfsnippetedit(Current)                    -- Edit snippet
 -- Edit files in snippet folder
--- Requires fzf.exe and bat.exe in your path (https://github.com/junegunn/fzf/releases)
--- Requires bat.exe in your path (https://github.com/sharkdp/bat)
+    -- Requires fzf.exe and bat.exe in your path (https://github.com/junegunn/fzf/releases)
+    -- Requires bat.exe in your path (https://github.com/sharkdp/bat)
     local snipfolder = config.ConfigDir..[[/../snippets]]
     Current.CdCmd(Current,{snipfolder})
     local sel, err = shell.RunInteractiveShell("fzf.exe --history='"..config.ConfigDir.."/history/snip.fzf'  --preview 'bat.exe --style=numbers --color=always --line-range :500 {}' --prompt='> edit snippet '   --color prompt:110 ", false, true)
@@ -1448,7 +1448,7 @@ function fzfsnippetedit(Current)                    -- Edit snippet
 end
 function fzfline(Current)                           -- Display/insert line from a saved list - by file type
 -- Select and insert line from saved file - by file type
--- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
+    -- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
     -- Check for unknown file type
     local filetype = Current.Buf:FileType()
     if filetype=="batch" then filetype="bat" end
@@ -1523,8 +1523,8 @@ function fzflineedit(Current)                       -- Edit saved lines
 end
 function fzfinsertfile(Current)                     -- Display/insert file from project
 -- Use fzf to select and insert a file from your project
--- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
--- Requires bat.exe in your path (https://github.com/sharkdp/bat)
+    -- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
+    -- Requires bat.exe in your path (https://github.com/sharkdp/bat)
     local projfolder = pathutils.Dir(Current.Buf.AbsPath)
     Current.CdCmd(Current,{projfolder})
     local sel, err = shell.RunInteractiveShell("fzf.exe --history='"..config.ConfigDir.."/history/ins.fzf'   --preview 'bat.exe --style=numbers --color=always --line-range :500 {}' --prompt='> insert '    --color prompt:110", false, true)
@@ -1542,8 +1542,8 @@ function fzfinsertfile(Current)                     -- Display/insert file from 
 end
 function fzfinsertfilename(Current)                 -- Display/insert filename from project
 -- Use fzf to select and insert a filename from your project
--- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
--- Requires bat.exe in your path (https://github.com/sharkdp/bat)
+    -- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
+    -- Requires bat.exe in your path (https://github.com/sharkdp/bat)
     local projfolder = pathutils.Dir(Current.Buf.AbsPath)
     Current.CdCmd(Current,{projfolder})
     local sel, err = shell.RunInteractiveShell("fzf.exe --history='"..config.ConfigDir.."/history/ins.fzf'   --preview 'bat.exe --style=numbers --color=always --line-range :500 {}' --prompt='> insert filename '    --color prompt:110", false, true)
@@ -1557,8 +1557,8 @@ function fzfinsertfilename(Current)                 -- Display/insert filename f
 end
 function fzftemplate(Current)                       -- Display/insert template
 -- Use fzf to select and insert a file from template folder, with preview
--- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
--- Requires bat.exe in your path (https://github.com/sharkdp/bat)
+    -- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
+    -- Requires bat.exe in your path (https://github.com/sharkdp/bat)
     local temfolder = config.ConfigDir..[[/../templates]]
     Current.CdCmd(Current,{temfolder})
     local sel, err = shell.RunInteractiveShell("fzf.exe --history='"..config.ConfigDir.."/history/tem.fzf'   --preview 'bat.exe --style=numbers --color=always --line-range :500 {}' --prompt='> template '  --color prompt:110", false, true)
@@ -1576,8 +1576,8 @@ function fzftemplate(Current)                       -- Display/insert template
 end
 function fzftemplateedit(Current)                   -- Edit template
 -- Use fzf to select and edit a file from template folder
--- Requires fzf.exe and bat.exe in your path (https://github.com/junegunn/fzf/releases)
--- Requires bat.exe in your path (https://github.com/sharkdp/bat)
+    -- Requires fzf.exe and bat.exe in your path (https://github.com/junegunn/fzf/releases)
+    -- Requires bat.exe in your path (https://github.com/sharkdp/bat)
     local temfolder = config.ConfigDir..[[/../templates]]
     Current.CdCmd(Current,{temfolder})
     local sel, err = shell.RunInteractiveShell("fzf.exe --history='"..config.ConfigDir.."/history/tem.fzf'  --preview 'bat.exe --style=numbers --color=always --line-range :500 {}' --prompt='> edit template '   --color prompt:110 ", false, true)
@@ -1592,10 +1592,10 @@ function fzftemplateedit(Current)                   -- Edit template
 end
 function fzfloadbackup(Current)                     -- Display/open backup from .\zBackup
 -- Select and load a backup from .\zBackup
--- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
--- Requires bat.exe in your path (https://github.com/sharkdp/bat)
--- Require xcopy.exe in your path
-local zbackfolder = pathutils.Dir(Current.Buf.AbsPath)..[[\zBackup]]
+    -- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
+    -- Requires bat.exe in your path (https://github.com/sharkdp/bat)
+    -- Require xcopy.exe in your path
+    local zbackfolder = pathutils.Dir(Current.Buf.AbsPath)..[[\zBackup]]
     if not io.exists(zbackfolder) then return end
 
     Current.CdCmd(Current,{zbackfolder})
@@ -1619,9 +1619,9 @@ function fzfexplorebackupfile(Current)              -- Explore backup files, to 
 end
 function fzfgoprev(Current)                         -- Goto previous editing location
 -- Goto previous editing location
--- See onRune function which automatically saves new line numbers
--- Requires cat.exe in your path (http://gnuwin32.sourceforge.net/packages/coreutils.htm)
--- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
+    -- See onRune function which automatically saves new line numbers
+    -- Requires cat.exe in your path (http://gnuwin32.sourceforge.net/packages/coreutils.htm)
+    -- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
 
     -- Convert editor.History to a file
     local list = {}
@@ -1658,8 +1658,8 @@ function fzfgoprev(Current)                         -- Goto previous editing loc
 end
 function fzfgoto(Current)                           -- Goto simple text find
 -- Fuzzy search the current file and jump to the selected line
--- Requires cat.exe in your path (http://gnuwin32.sourceforge.net/packages/coreutils.htm)
--- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
+    -- Requires cat.exe in your path (http://gnuwin32.sourceforge.net/packages/coreutils.htm)
+    -- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
 
     local filename = Current.Buf.AbsPath:gsub([[\]],[[/]]) -- fzf needs unix paths
     local seed = editor.GetSelection(Current)
@@ -1685,7 +1685,7 @@ function maketags(Current)                          -- TODO: Make/refresh TAGS
 end
 function fzfhelp(Current)                           -- Display/read help files
 -- Select and view a help file - from various locations
--- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
+    -- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
     local filelist = [[dir /s/b/a-d ]]..config.ConfigDir..[[\help\*.md ]]
     filelist = filelist..[[& dir /s/b/a-d  ]]..config.ConfigDir..[[\runtime\help\*.md ]]
     filelist = filelist..[[& dir /s/b/a-d  ]]..config.ConfigDir..[[\..\..\help\*.md ]]
@@ -1697,7 +1697,7 @@ function fzfhelp(Current)                           -- Display/read help files
 end
 function fzfhelpedit(Current)                       -- Edit help file
 -- Select and edit a help file - from various locations
--- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
+    -- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
     local filelist = [[dir /s/b/a-d ]]..config.ConfigDir..[[\help\*.md ]]
     filelist = filelist..[[& dir /s/b/a-d  ]]..config.ConfigDir..[[\runtime\help\*.md ]]
     filelist = filelist..[[& dir /s/b/a-d  ]]..config.ConfigDir..[[\..\..\help\*.md ]]
@@ -1709,12 +1709,12 @@ function fzfhelpedit(Current)                       -- Edit help file
 end
 function fzffindinfile(Current)                     -- Goto filtered list of lines
 -- Select from a pre-filtered list of lines from current file
--- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
--- Requires findstr.exe as this is universal in WindowsTM,
+    -- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
+    -- Requires findstr.exe as this is universal in WindowsTM,
     -- prefix your search with /s for a recursive search
     -- prefix your search with /l for a simple for a literal search
     -- default below is /npi (Line numbers, Path, case Insensitive)
-    -- placing string in quotes causes phrase search ( non-quoted strings are matched separately "OR")
+    -- placing string in quotes causes phrase search (non-quoted strings are matched separately "OR")
     -- other grep tools are available :)
     local path = pathutils.Dir(Current.Buf.AbsPath)
     Current.CdCmd(Current,{path})
@@ -1749,9 +1749,8 @@ function fzffindinfile(Current)                     -- Goto filtered list of lin
 end
 function fzffindinfileregex(Current)                -- Goto regex filitered lines
 -- Select from a regex filtered list of lines from current file
--- Requires fzf.exe in your path
--- (https://github.com/junegunn/fzf/releases)
--- Requires findstr.exe as this is universal in WindowsTM,
+    -- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
+    -- Requires findstr.exe as this is universal in WindowsTM,
     -- prefix your search with /s for a recursive search
     -- prefix your search with /l for a simple for a literal search
     -- default below is /npi (Line numbers, Path, case Insensitive)
@@ -1790,9 +1789,8 @@ function fzffindinfileregex(Current)                -- Goto regex filitered line
 end
 function fzffindinfiles(Current)                    -- Open file containing search term
 -- Select from a pre-filtered list of lines from current project
--- Requires fzf.exe in your path
--- (https://github.com/junegunn/fzf/releases)
--- Requires findstr.exe as this is universal in WindowsTM,
+    -- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
+    -- Requires findstr.exe as this is universal in WindowsTM,
     -- prefix your search with /s for a recursive search
     -- prefix your search with /l for a simple for a literal search
     -- default below is /npi (Line numbers, Path, case Insensitive)
@@ -1832,8 +1830,8 @@ function fzffindinfiles(Current)                    -- Open file containing sear
 end
 function fzfshell(Current)                          -- Display/run saved shell commands
 -- Select and execute saved shell commands
--- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
--- Requires cat.exe in your path (http://gnuwin32.sourceforge.net/packages/coreutils.htm)
+    -- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
+    -- Requires cat.exe in your path (http://gnuwin32.sourceforge.net/packages/coreutils.htm)
 
     -- Locate completions - a list of commands (manual update)
     local target = config.ConfigDir..[[/favorites/shell.txt]]
@@ -1876,8 +1874,8 @@ function fzfshelledit(Current)                      -- Edit saved shell commands
 end
 function fzflua(Current)                            -- Display/run saved Lua commands
 -- Select and execute saved Lua commands
--- Requires fzf.exe in your path  (https://github.com/junegunn/fzf/releases)
--- Requires cat.exe in your path  (http://gnuwin32.sourceforge.net/packages/coreutils.htm)
+    -- Requires fzf.exe in your path  (https://github.com/junegunn/fzf/releases)
+    -- Requires cat.exe in your path  (http://gnuwin32.sourceforge.net/packages/coreutils.htm)
 
     -- Locate completions - a list of commands (manual update)
     local target = config.ConfigDir..[[/favorites/lua.txt]]
@@ -1929,8 +1927,8 @@ function fzfluaedit(Current)                        -- Edit saved Lua commands
 end
 function fzftextfilter(Current)                     -- Display/run saved textfilter commands
 -- Select and execute saved textfilter commands
--- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
--- Requires cat.exe in your path (http://gnuwin32.sourceforge.net/packages/coreutils.htm)
+    -- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
+    -- Requires cat.exe in your path (http://gnuwin32.sourceforge.net/packages/coreutils.htm)
 
     -- Locate completions - a list of commands (manual update)
     local target = config.ConfigDir..[[/favorites/textfilter.txt]]
@@ -1979,8 +1977,8 @@ function fzfeditmacro(current)                      -- TODO: Edit a macro
 end
 function fzfreference(Current)                      -- TODO: Display/insert reference as markdown
 -- Select and insert reference from refs folder, with preview
--- Requires fzf.exe and bat.exe in your path (https://github.com/junegunn/fzf/releases)
--- Requires bat.exe in your path (https://github.com/sharkdp/bat)
+    -- Requires fzf.exe and bat.exe in your path (https://github.com/junegunn/fzf/releases)
+    -- Requires bat.exe in your path (https://github.com/sharkdp/bat)
     local reffolder = [[O:/MyProfile/user/citations]]
     Current.CdCmd(Current,{reffolder})
     local sel, err = shell.RunInteractiveShell("fzf.exe --history='"..config.ConfigDir.."/history/ref.fzf'  --preview 'bat.exe -p  --color=always --line-range :500 {}' --prompt='> ref '   --color prompt:110 ", false, true)
@@ -1996,8 +1994,8 @@ function fzfreference(Current)                      -- TODO: Display/insert refe
 end
 function fzfreferenceedit(Current)                  -- TODO: Edit reference
 -- Edit files in citations folder
--- Requires fzf.exe and bat.exe in your path (https://github.com/junegunn/fzf/releases)
--- Requires bat.exe in your path (https://github.com/sharkdp/bat)
+    -- Requires fzf.exe and bat.exe in your path (https://github.com/junegunn/fzf/releases)
+    -- Requires bat.exe in your path (https://github.com/sharkdp/bat)
     local reffolder = [[O:/MyProfile/user/citations]]
     Current.CdCmd(Current,{reffolder})
     local sel, err = shell.RunInteractiveShell("fzf.exe --history='"..config.ConfigDir.."/history/ref.fzf'  --preview 'bat.exe -p --color=always --line-range :500 {}' --prompt='> edit ref '   --color prompt:110 ", false, true)
@@ -2010,9 +2008,9 @@ function fzfreferenceedit(Current)                  -- TODO: Edit reference
         editor.NewTab(Current,sel)
     end
 end
-function fzfswitchbuffer(Current)                   -- Swich windows
+function fzfswitchbuffer(Current)                   -- Switch windows
 -- Seleect and switch to another open tab
--- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
+    -- Requires fzf.exe in your path (https://github.com/junegunn/fzf/releases)
     local tabs = micro.Tabs()
     if #tabs.List < 2 then return end
     local sel = fzf(table.concat(editor.Panes(Current),"\n")," --tac --prompt='> switch '")
@@ -2024,8 +2022,8 @@ function fzfswitchbuffer(Current)                   -- Swich windows
 end
 function fzfdiff(Current)                           -- Select a diff to compare
 -- Select a diff to compare from anywhere
--- Requires openfilebox.exe in your path (https://www.robvanderwoude.com/dialogboxes.php#OpenFileBox)
--- Requires TextDiff.exe in your path (http://www.angusj.com/delphi/textdiff.html
+    -- Requires openfilebox.exe in your path (https://www.robvanderwoude.com/dialogboxes.php#OpenFileBox)
+    -- Requires TextDiff.exe in your path (http://www.angusj.com/delphi/textdiff.html
     io.cd(Current)
     local filename = shell.RunCommand([[openfilebox.exe "*.*" "." "Diff File"]])
     filename = filename:trim()
@@ -2036,7 +2034,7 @@ function fzfdiff(Current)                           -- Select a diff to compare
 end
 function fzfexplorediff(Current)                    -- Explore to find or delete backup files
 -- Explore to find or delete backup files
--- Requires shelexec.exe in your path (http://www.naughter.com/shelexe.h
+    -- Requires shelexec.exe in your path (http://www.naughter.com/shelexe.h
     local zdifffolder = pathutils.Dir(Current.Buf.AbsPath)..[[\zBackup]]
     if not io.exists(zdifffolder) then return end
     shell.RunCommand("shelexec.exe "..zdifffolder)
@@ -2095,7 +2093,7 @@ function filesaveasdlg(Current)
 end
 function replaceinfilesdlg(Current)
 -- Requires GrepWin.exe in your path, I'm using Version 1.6.1.519 (https://tools.stefankueng.com/grepWin_cmd.html)
--- This utility is unique in accepting multiple command line parameters
+    -- This utility is unique in accepting multiple command line parameters
     editor.Save(Current)
 
     -- Variables
@@ -2142,23 +2140,23 @@ function init()
         os.setenv("PATH",p)
     end
 
-    -- Set console colours
+    -- Set console colours in Windows console
     -- shell.RunInteractiveShell([[colortool.exe -q O:\MyProfile\editor\confMicro\colours.ini]])
 
     -- Load History
     editor.LoadHistory()
 
     -- Make commands
-    config.MakeCommand("toupper", toupper, config.NoComplete)
-    config.MakeCommand("tolower", tolower, config.NoComplete)
-    config.MakeCommand("join", joinlines, config.NoComplete)
-    config.MakeCommand("wc", wordcount, config.NoComplete)
-    config.MakeCommand("pwd", pwd, config.NoComplete)
     config.MakeCommand("ahk", editAHK, config.NoComplete)
     config.MakeCommand("cheat", cheat, config.NoComplete)
+    config.MakeCommand("join", joinlines, config.NoComplete)
+    config.MakeCommand("pwd", pwd, config.NoComplete)
+    config.MakeCommand("tolower", tolower, config.NoComplete)
+    config.MakeCommand("toupper", toupper, config.NoComplete)
+    config.MakeCommand("wc", wordcount, config.NoComplete)
 
     -- Add help files
-    -- Not sure why this one need declaring, others in the help dir appear by magic!
+    -- Not sure why this one need declaring, others placed in the help folder appear by magic!
     config.AddRuntimeFile("keys", config.RTHelp, "help/keys.md")
 
     -- Make linters

@@ -1,4 +1,3 @@
--- Some favourite line of Lua
 print(_VERSION)
 print(package.path:gsub(";","\n"))
 print(package.cpath:gsub(";","\n"))

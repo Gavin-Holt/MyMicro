@@ -1,4 +1,3 @@
--- Some saved textfilter calls
 expand.exe -t4          -- Properly substitute spaces for tabs
 gawk.exe '$NF>0'        -- Return all non-blank lines in the selected text
 lua.exe -               -- Run selected text with external Lua interpreter

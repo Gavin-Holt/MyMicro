@@ -52,7 +52,7 @@ rules:
         - constant.unicode: \\u\{[[:xdigit:]]+}
   # '' string
   - constant.string: "(\\'.+\\')"
-  # rem as comment
-  - comment.rem: "(?i)(REM\\s.*)"
   # :: as comment
   - comment.rem: "(?i)(\\:\\:\\s.*)"
+  # rem as comment
+  - comment.rem: "(?i)(REM\\s.*)"
