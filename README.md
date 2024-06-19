@@ -599,7 +599,7 @@ Additionally, above my ````editor```` folder I have a ````help```` folder full o
 
 ## Installation
 
-Just download the repository to a folder of your choice. I am in the process of removing and absolute paths fro my script.
+Just download the repository to a folder of your choice. I am in the process of removing any absolute paths from my script.
 
 ---
 
