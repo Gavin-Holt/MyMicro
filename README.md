@@ -231,7 +231,7 @@ In my trials of many editors, there are some editing actions and shortcuts I fin
 | File New Window       | Ctrl_Alt_N            |
 | File Save             | Ctrl_S                |
 | File Revert           | Ctrl_R   Broken and dissabled             | 
-| File Print            | Ctrl_P                |
+| File Print            | Ctrl_P   TODO         |
 | File Close            | Ctrl_W                |
 | File Spell Check      | Ctrl_F7               |
 | File Backup           | Ctrl_Alt_B            |
