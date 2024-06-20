@@ -143,8 +143,8 @@ In my trials of many editors, there are some editing actions and shortcuts I fin
 | EOF                   | Ctrl_End              |
 | [Jump Brackets](https://github.com/Gavin-Holt/MyMicro/blob/c49e23b83546807c7442bb57091ffada4c4eff72/confMicro/init.lua#L931)         | [Ctrl_J](https://github.com/Gavin-Holt/MyMicro/blob/c49e23b83546807c7442bb57091ffada4c4eff72/confMicro/bindings.json#L91)                |
 | Goto Line Number      | [Ctrl_G](https://github.com/Gavin-Holt/MyMicro/blob/c49e23b83546807c7442bb57091ffada4c4eff72/confMicro/bindings.json#L90)                |
-| GoForwards Regex-i    | Ctrl_] [here](https://github.com/Gavin-Holt/MyMicro/blob/c49e23b83546807c7442bb57091ffada4c4eff72/confMicro/bindings.json#L190)                |
-| GoBackwards Regex-i   | Ctrl_[ [here](https://github.com/Gavin-Holt/MyMicro/blob/c49e23b83546807c7442bb57091ffada4c4eff72/confMicro/bindings.json#L191)                |
+| [GoForwards Regex-i](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/init.lua#L773)    | Ctrl_] [here](https://github.com/Gavin-Holt/MyMicro/blob/c49e23b83546807c7442bb57091ffada4c4eff72/confMicro/bindings.json#L190)                |
+| [GoBackwards Regex-i](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/init.lua#L807)   | Ctrl_[ [here](https://github.com/Gavin-Holt/MyMicro/blob/c49e23b83546807c7442bb57091ffada4c4eff72/confMicro/bindings.json#L191)                |
 
 ### Selecting
 
@@ -158,9 +158,9 @@ In my trials of many editors, there are some editing actions and shortcuts I fin
 | Select Line(s) Down   | [Ctrl_L](https://github.com/Gavin-Holt/MyMicro/blob/c49e23b83546807c7442bb57091ffada4c4eff72/confMicro/bindings.json#L93)                |
 | Select Line(s) Up     | [Ctrl_Shift_L](https://github.com/Gavin-Holt/MyMicro/blob/c49e23b83546807c7442bb57091ffada4c4eff72/confMicro/bindings.json#L126)          |
 | [Select Inner](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/init.lua#L1046)          | [Ctrl_Shift_I](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/bindings.json#L123)          | 
-| [Select Outer](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/init.lua#L1066)          | Ctrl_Shift_J          | 
-| [SelectForwards Regex-i](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/init.lua#L709) | [Ctrl_Shift_]](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/bindings.json#L188)         | 
-| SelectBackwards Regex-i| Ctrl_Shift_[         | 
+| [Select Outer](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/init.lua#L1066)          | [Ctrl_Shift_J](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/bindings.json#L124)          | 
+| [SelectForwards Regex-i](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/init.lua#L709) | Ctrl_Shift_] [here](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/bindings.json#L188)         | 
+| [SelectBackwards Regex-i](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/init.lua#L741)| Ctrl_Shift_[ [here](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/bindings.json#L189)        | 
 | Swap Anchor<>Caret    | Ctrl_-                |
 
 ### Basic editing actions
@@ -169,22 +169,22 @@ In my trials of many editors, there are some editing actions and shortcuts I fin
 | :-------------------- | :-----------------    |
 | Delete Word Left      | Ctrl_Bksp             |
 | Delete Word Right     | Ctrl_Del              |
-| Delete to EOL         | Ctrl_K                |
-| Delete to BOL         | Ctrl_Shift_K          |
-| Delete Line(s)        | Ctrl_Y                |
+| Delete to EOL         | [Ctrl_K](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/bindings.json#L92)                |
+| Delete to BOL         | [Ctrl_Shift_K](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/bindings.json#L125)          |
+| Delete Line(s)        | [Ctrl_Y](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/bindings.json#L105)                |
 | Insert Line Break     | Enter                 |
-| Add Line Above        | Ctrl_Enter            |
-| Add Line Below        | Shift_Enter           | 
+| Add Line Above        | [Ctrl_Enter](https://github.com/Gavin-Holt/MyMicro/blob/ecf48243ec4142562c5cb7f7d7a8c43d70637848/micro.ahk#L30)            |
+| Add Line Below        | [Shift_Enter](https://github.com/Gavin-Holt/MyMicro/blob/ecf48243ec4142562c5cb7f7d7a8c43d70637848/micro.ahk#L33)           | 
 | Move Line(s) Up       | Ctrl_Shift_Up         |
 | Move Line(s) Down     | Ctrl_Shift_Down       |
-| Duplicate Line(s)     | Ctrl_D                |
-| Indent Line(s)        | Ctrl_Shift_>          |
-| Outdent Line(s)       | Ctrl_Shift_<          |
+| [Duplicate Line(s)](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/init.lua#L580)     | [Ctrl_D](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/bindings.json#L87)                |
+| Indent Line(s)        | [Ctrl_Shift_>](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/bindings.json#L109)          |
+| Outdent Line(s)       | [Ctrl_Shift_<](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/bindings.json#L108)          |
 | Undo                  | Ctrl_Z                |
 | Undoundo              | Ctrl_Shift_Z          |
-| Autocomplete Word     | Ctrl_/                |
-| Toggle Comments       | Ctrl_Q                |
-| Toggle WordWrap       | Ctrl_Shift_W          |
+| Autocomplete Word     | [Ctrl_/](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/bindings.json#L72)                |
+| [Toggle Comments](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/init.lua#L1222)       | [Ctrl_Q](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/bindings.json#L97)                |
+| [Toggle WordWrap](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/init.lua#L1168)       | [Ctrl_Shift_W ](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/bindings.json#L137)         |
 
 ### Clipboard Actions
 
