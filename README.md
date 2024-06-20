@@ -125,7 +125,7 @@ editor
 ## Custom key bindings
 For Windows many of these key bindings will not work without Autohotkey, which translates them into alternatives recognised by both the console and Micro. 
 
-In my trials of many editors, there are some editing actions and shortcuts I find useful, so I have adopted them.
+In my trials of many editors, there are some editing actions and shortcuts I find useful - so I have adopted them. In my selections you can see traces of CUA, wordstar and even Vim.
 
 ### Moving - local to cursor
 
@@ -157,9 +157,9 @@ In my trials of many editors, there are some editing actions and shortcuts I fin
 | Select EOL            | Ctrl_Shift_E, S_End   |
 | Select Line(s) Down   | [Ctrl_L](https://github.com/Gavin-Holt/MyMicro/blob/c49e23b83546807c7442bb57091ffada4c4eff72/confMicro/bindings.json#L93)                |
 | Select Line(s) Up     | [Ctrl_Shift_L](https://github.com/Gavin-Holt/MyMicro/blob/c49e23b83546807c7442bb57091ffada4c4eff72/confMicro/bindings.json#L126)          |
-| Select Inner          | Ctrl_Shift_I          | 
-| Select Outer          | Ctrl_Shift_J          | 
-| SelectForwards Regex-i | Ctrl_Shift_]         | 
+| [Select Inner](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/init.lua#L1046)          | [Ctrl_Shift_I](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/bindings.json#L123)          | 
+| [Select Outer](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/init.lua#L1066)          | Ctrl_Shift_J          | 
+| [SelectForwards Regex-i](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/init.lua#L709) | [Ctrl_Shift_]](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/bindings.json#L188)         | 
 | SelectBackwards Regex-i| Ctrl_Shift_[         | 
 | Swap Anchor<>Caret    | Ctrl_-                |
 
@@ -352,7 +352,7 @@ Powerful editors have command lines, this list includes annotations about the co
 
 #### Goto list
 
-This allows plain text searching of the current file, and then navigates to the selected position (you can also search for a line number).
+This allows fzf searching of the current file, and then navigates to the selected position (you can also search for a line number).
 
 | Actions______________ | Keys_________________ |
 | :---                  | :---                  |
