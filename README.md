@@ -125,7 +125,7 @@ editor
 ## Custom key bindings
 For Windows many of these key bindings will not work without Autohotkey, which translates them into alternatives recognised by both the console and Micro. 
 
-In my trials of many editors, there are some editing actions and shortcuts I find useful - so I have adopted them. In my selections you can see traces of CUA, wordstar and even Vim.
+In my trials of many editors, there are some editing actions and shortcuts I find useful - so I have adopted them. In my selections you can see traces of CUA, WordStar and even Vim.
 
 ### Moving - local to cursor
 
