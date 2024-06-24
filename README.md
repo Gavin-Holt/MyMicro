@@ -151,17 +151,17 @@ In my trials of many editors, there are some editing actions and shortcuts I fin
 | Actions______________ | Keys_________________ |
 | :-------------------- | :-----------------    |
 | Select All            | Ctrl_A                |
-| Select Word           | [Ctrl_Space](https://github.com/Gavin-Holt/MyMicro/blob/c49e23b83546807c7442bb57091ffada4c4eff72/confMicro/bindings.json#L164)            |
-| Select Word Back      | [Ctrl_Shift_Space](https://github.com/Gavin-Holt/MyMicro/blob/c49e23b83546807c7442bb57091ffada4c4eff72/confMicro/bindings.json#L165)      |
+| [Select Word]([url](https://github.com/Gavin-Holt/MyMicro/blob/c21501e2264fe00835a9a28f8d382a9e7585343e/confMicro/init.lua#L461))           | [Ctrl_Space](https://github.com/Gavin-Holt/MyMicro/blob/c49e23b83546807c7442bb57091ffada4c4eff72/confMicro/bindings.json#L164)            |
+| [Select Word Back]([url](https://github.com/Gavin-Holt/MyMicro/blob/c21501e2264fe00835a9a28f8d382a9e7585343e/confMicro/init.lua#L465))      | [Ctrl_Shift_Space](https://github.com/Gavin-Holt/MyMicro/blob/c49e23b83546807c7442bb57091ffada4c4eff72/confMicro/bindings.json#L165)      |
 | Select BOL            | Ctrl_Shift_B, S_Home  |
 | Select EOL            | Ctrl_Shift_E, S_End   |
 | Select Line(s) Down   | [Ctrl_L](https://github.com/Gavin-Holt/MyMicro/blob/c49e23b83546807c7442bb57091ffada4c4eff72/confMicro/bindings.json#L93)                |
-| Select Line(s) Up     | [Ctrl_Shift_L](https://github.com/Gavin-Holt/MyMicro/blob/c49e23b83546807c7442bb57091ffada4c4eff72/confMicro/bindings.json#L126)          |
+| [Select Line(s) Up]([url](https://github.com/Gavin-Holt/MyMicro/blob/c21501e2264fe00835a9a28f8d382a9e7585343e/confMicro/init.lua#L472))     | [Ctrl_Shift_L](https://github.com/Gavin-Holt/MyMicro/blob/c49e23b83546807c7442bb57091ffada4c4eff72/confMicro/bindings.json#L126)          |
 | [Select Inner](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/init.lua#L1046)          | [Ctrl_Shift_I](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/bindings.json#L123)          | 
 | [Select Outer](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/init.lua#L1066)          | [Ctrl_Shift_J](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/bindings.json#L124)          | 
 | [SelectForwards Regex-i](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/init.lua#L709) | Ctrl_Shift_] [here](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/bindings.json#L188)         | 
 | [SelectBackwards Regex-i](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/init.lua#L741)| Ctrl_Shift_[ [here](https://github.com/Gavin-Holt/MyMicro/blob/a0dc5d76f6e412c5a9b6614833145ba4245bb645/confMicro/bindings.json#L189)        | 
-| Swap Anchor<>Caret    | Ctrl_-                |
+| [Swap Anchor<>Caret]([url](https://github.com/Gavin-Holt/MyMicro/blob/c21501e2264fe00835a9a28f8d382a9e7585343e/confMicro/init.lua#L489))    | Ctrl_-                |
 
 ### Basic editing actions
 
